@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    container_name: privatai-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+    - OLLAMA_URL=http://privatai-ollama:11434
+    - OLLAMA_MODEL=phi
+
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - qdrant
+      - ollama
+
+  qdrant:
+    image: qdrant/qdrant:v1.7.4
+    container_name: privatai-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: privatai-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  frontend:
+    build: ../frontend
+    container_name: privatai-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  qdrant_data:
+  ollama_data:
