@@ -134,14 +134,6 @@ docker compose up -d
 
 ---
 
-##  License
-
-This project is for academic and research purposes
-
-
----
-
-
 ## Author
 
 **Chinmay Patil**  
